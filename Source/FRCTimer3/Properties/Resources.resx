@@ -118,12 +118,6 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="Chronoir_netLogos" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Chronoir-netLogos.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="crtlogos" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\crtlogos.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
   <data name="DefaultTeamNameList" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\teams.xml;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
@@ -136,8 +130,14 @@
   <data name="Last3sec" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Last3sec.wav;System.IO.MemoryStream, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
+  <data name="NiaTechLabLogos" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\NiaTechLabLogos.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="Ready" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Ready.wav;System.IO.MemoryStream, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="rtlogos" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\rtlogos.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="Start" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Start.wav;System.IO.MemoryStream, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>

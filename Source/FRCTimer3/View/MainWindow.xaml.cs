@@ -185,8 +185,8 @@ namespace FRCTimer3 {
 					e.Message,
 					mainViewModel.AppVer.ProductName,
 					MessageBoxButton.YesNo,
-					MessageBoxImage.Question,
-					MessageBoxResult.No
+                    e.IsWarning ? MessageBoxImage.Warning : MessageBoxImage.Question,
+                    MessageBoxResult.No
 				) == MessageBoxResult.Yes
 			) {
 				e.Callback?.Invoke();
@@ -198,10 +198,10 @@ namespace FRCTimer3 {
 		/// </summary>
 		private void mainViewModel_ExitFRCTimer( object sender, ComfirmEventArgs e ) {
 			if( MessageBox.Show(
-					"アプリを終了しますか？",
+					$"アプリを終了しますか？{e.Message}",
 					mainViewModel.AppVer.ProductName,
 					MessageBoxButton.YesNo,
-					MessageBoxImage.Question,
+					e.IsWarning ? MessageBoxImage.Warning : MessageBoxImage.Question,
 					MessageBoxResult.No
 				) == MessageBoxResult.Yes
 			) {

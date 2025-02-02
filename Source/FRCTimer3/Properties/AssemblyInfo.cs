@@ -7,12 +7,12 @@ using System.Windows;
 // アセンブリに関する一般情報は以下の属性セットをとおして制御されます。
 // アセンブリに関連付けられている情報を変更するには、
 // これらの属性値を変更してください。
-[assembly: AssemblyTitle( "Chronoir Robocon Timer" )]
-[assembly: AssemblyDescription( "Chronoir Robocon Timer" )]
+[assembly: AssemblyTitle("Robocon Timer")]
+[assembly: AssemblyDescription("Robocon Timer")]
 [assembly: AssemblyConfiguration( "" )]
-[assembly: AssemblyCompany( "Chronoir.net" )]
-[assembly: AssemblyProduct( "Chronoir Robocon Timer" )]
-[assembly: AssemblyCopyright( "Copyright ©  2014-2016 Chronoir.net" )]
+[assembly: AssemblyCompany("Nia T.N. Tech Lab.")]
+[assembly: AssemblyProduct("Robocon Timer")]
+[assembly: AssemblyCopyright("Copyright ©  2014-2025 Nia T.N. Tech Lab.")]
 [assembly: AssemblyTrademark( "" )]
 [assembly: AssemblyCulture( "" )]
 
@@ -51,7 +51,7 @@ using System.Windows;
 // すべての値を指定するか、下のように '*' を使ってビルドおよびリビジョン番号を 
 // 既定値にすることができます:
 // [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion( "1.11.6.170" )]
-[assembly: AssemblyFileVersion( "1.11.6.170" )]
+[assembly: AssemblyVersion("1.12.7.200")]
+[assembly: AssemblyFileVersion("1.12.7.200")]
 [assembly: NeutralResourcesLanguage( "ja-JP" )]
 

@@ -137,15 +137,15 @@ namespace FRCTimer3 {
 		/// <summary>
 		///		セッティングタイム終了
 		/// </summary>
-		PlayPrepairing,
+		GamePrepairing,
 		/// <summary>
 		///		ゲーム開始
 		/// </summary>
-		PlayReady,
+		GameReady,
 		/// <summary>
 		///		ゲーム中
 		/// </summary>
-		PlayTime,
+		GameTime,
 		/// <summary>
 		///		Vゴール
 		/// </summary>
@@ -161,7 +161,7 @@ namespace FRCTimer3 {
 	}
 
 	enum TimerType {
-		SettingReady, Setting, PlayReady, Play
+		SettingReady, Setting, GameReady, Game
 	}
 
 	/// <summary>
@@ -256,13 +256,19 @@ namespace FRCTimer3 {
 		public Action Callback { get; private set; }
 
 		/// <summary>
+		///		メッセージボックスのアイコンを警告にするかどうか
+		/// </summary>
+		public bool IsWarning { get; private set; }
+
+		/// <summary>
 		///		
 		/// </summary>
 		/// <param name="mes"></param>
 		/// <param name="cb"></param>
-		public ComfirmEventArgs( string mes, Action cb ) {
+		public ComfirmEventArgs( string mes, Action cb, bool isWarn = false ) {
 			Message = mes;
 			Callback = cb;
+			IsWarning = isWarn;
 		}
 	}
 

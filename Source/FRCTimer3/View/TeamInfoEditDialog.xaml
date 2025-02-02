@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:FRCTimer3"
         mc:Ignorable="d"
         Title="{Binding Title}" Height="320" Width="480"
-		ResizeMode="NoResize" Icon="/CRTimer;component/crtlogoi.ico">
+		ResizeMode="NoResize" Icon="/RoboconTimer;component/rtlogoi.ico">
     <Grid Margin="15">
         <Grid.RowDefinitions>
 			<RowDefinition Height="*"/>

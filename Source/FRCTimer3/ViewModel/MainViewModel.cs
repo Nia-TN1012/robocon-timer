@@ -15,17 +15,17 @@ namespace FRCTimer3 {
 	class MainViewModel : ViewModelBase {
 
 		/// <summary>
-		///		Chronoir Robocon Timerの状態と画面に表示するメッセージのペアのリストを表します。
+		///		Robocon Timerの状態と画面に表示するメッセージのペアのリストを表します。
 		/// </summary>
 		private Dictionary<FRCTimerState, string> message = new Dictionary<FRCTimerState, string> {
 			[FRCTimerState.TeamSelect] = "Team Select",
 			[FRCTimerState.SettingReady] = "Setting Ready ?",
 			[FRCTimerState.SettingTime] = "Setting Time",
-			[FRCTimerState.PlayPrepairing] = "Play Preparing",
-			[FRCTimerState.PlayReady] = "Play Ready ?",
-			[FRCTimerState.PlayTime] = "Play Time",
+			[FRCTimerState.GamePrepairing] = "Game Preparing",
+			[FRCTimerState.GameReady] = "Game Ready ?",
+			[FRCTimerState.GameTime] = "Game Time",
 			[FRCTimerState.GameSet] = "Game Set !",
-			[FRCTimerState.Victory] = "V-GOAL Congratulations !",
+			[FRCTimerState.Victory] = "Congratulations !",
 			[FRCTimerState.FRCTimerSetting] = null
 		};
 
@@ -54,7 +54,7 @@ namespace FRCTimer3 {
 		#endregion
 
 		/// <summary>
-		///		Chronoir Robocon Timerの現在の状態を取得します。
+		///		Robocon Timerの現在の状態を取得します。
 		/// </summary>
 		public FRCTimerState NowState { get; private set; } =
 			FRCTimerState.TeamSelect;
@@ -163,7 +163,7 @@ namespace FRCTimer3 {
 				_modifyDisplayingTimer: MotifyDisplayingTimer,
 				_startSettingTime: StartSettingTime, _finishSettingTime: FinishSettingTime, _startPlayTime: StartPlayTime, _finishPlayTime: FinishPlayTime,
 				_notifyLast10sec: NotifyLast10sec, _finishAutoMachineLanchStartTime: NotifyFinishAutoMachineLanchStartTime,
-				_playReadySound: PlayReadySound, _playStartSound: PlayStartSound, _playLast3secSound: PlayLast3secSound, _playFinishSound: PlayFinishSound
+				_gameReadySound: PlayReadySound, _gameStartSound: PlayStartSound, _gameLast3secSound: PlayLast3secSound, _gameFinishSound: PlayFinishSound
 			);
 		}
 
@@ -208,19 +208,19 @@ namespace FRCTimer3 {
 					case FRCTimerState.TeamSelect:
 						ts = TimerModel.SettingTime;
 						break;
-					case FRCTimerState.PlayPrepairing:
-						ts = TimerModel.PlayTime;
+					case FRCTimerState.GamePrepairing:
+						ts = TimerModel.GameTime;
 						break;
 					case FRCTimerState.SettingReady:
-					case FRCTimerState.PlayReady:
+					case FRCTimerState.GameReady:
 					case FRCTimerState.SettingTime:
-					case FRCTimerState.PlayTime:
+					case FRCTimerState.GameTime:
 						ts = timerModel.Duration;
 						break;
 				}
 
 				// Readyの時は秒のみを表示します。
-				if( NowState == FRCTimerState.SettingReady || NowState == FRCTimerState.PlayReady ) {
+				if( NowState == FRCTimerState.SettingReady || NowState == FRCTimerState.GameReady ) {
 					return ts.ToString( "%s" );
 				}
 
@@ -273,7 +273,7 @@ namespace FRCTimer3 {
 		///		セッティングタイムを終了時に実行します。
 		/// </summary>
 		private void FinishSettingTime( object sender, EventArgs e ) {
-			NowState = FRCTimerState.PlayPrepairing;
+			NowState = FRCTimerState.GamePrepairing;
 			DisplayMessageColor = Brushes.Lime;
 			DisplayTimerColor = Brushes.White;
 			IsTimerRunning = false;
@@ -286,8 +286,8 @@ namespace FRCTimer3 {
 		/// </summary>
 		private void StartPlayTime( object sender, EventArgs e ) {
 			DisplayTimerColor = TimerModel.AutoMachineLanchTimeLimit > TimeSpan.Zero ? Brushes.Aqua : Brushes.White;
-			NowState = FRCTimerState.PlayTime;
-			timerModel.Start( TimerType.Play );
+			NowState = FRCTimerState.GameTime;
+			timerModel.Start( TimerType.Game );
 			NotifyFRCTimerPropertyChanged();
 		}
 
@@ -410,8 +410,8 @@ namespace FRCTimer3 {
 		 *		TeamSelect -> セッティングスタート、セッティングをスキップ、About、終了
 		 *		SettingReady / PlayReady -> 中止、終了
 		 *		SettingTime -> 中止、終了
-		 *		PlayPrepairing -> ゲームスタート、チーム選択に戻る、終了
-		 *		PlayTime -> Vゴール、中止、終了
+		 *		GamePrepairing -> ゲームスタート、チーム選択に戻る、終了
+		 *		GameTime -> Vゴール、中止、終了
 		 *		GameSet、VGoal -> チーム選択に戻る、終了
 		 *		
 		 *		注：TeamSelect以外はチーム選択のコンボボックスをロックします。
@@ -476,7 +476,7 @@ namespace FRCTimer3 {
 		///		セッティングをスキップします。
 		/// </summary>
 		private void SkipSetting() {
-			NowState = FRCTimerState.PlayPrepairing;
+			NowState = FRCTimerState.GamePrepairing;
 			DisplayMessageColor = Brushes.Lime;
 			NotifyFRCTimerPropertyChanged();
 		}
@@ -499,9 +499,9 @@ namespace FRCTimer3 {
 		///		試合を開始します。
 		/// </summary>
 		private void StartPlay() {
-			NowState = FRCTimerState.PlayReady;
+			NowState = FRCTimerState.GameReady;
 			IsTimerRunning = true;
-			timerModel.Start( TimerType.PlayReady );
+			timerModel.Start( TimerType.GameReady );
 			NotifyFRCTimerPropertyChanged();
 			//dpTimer.Start();
 		}
@@ -546,8 +546,8 @@ namespace FRCTimer3 {
 				NowState = FRCTimerState.TeamSelect;
 			}
 			// 試合の場合、試合準備に戻ります。
-			else if( NowState == FRCTimerState.PlayReady || NowState == FRCTimerState.PlayTime ) {
-				NowState = FRCTimerState.PlayPrepairing;
+			else if( NowState == FRCTimerState.GameReady || NowState == FRCTimerState.GameTime ) {
+				NowState = FRCTimerState.GamePrepairing;
 			}
 			DisplayTimerColor = Brushes.White;
 			PlaySoundEffect?.Invoke( this, new FRCSoundEffectTypeEventArgs( FRCSoundEffectType.Stop ) );
@@ -570,7 +570,7 @@ namespace FRCTimer3 {
 			( cmdBackToTeamSelect = new ActionCommand(
 				this,
 				p => {
-					if( NowState == FRCTimerState.PlayPrepairing ) {
+					if( NowState == FRCTimerState.GamePrepairing ) {
 						ComfirmAction?.Invoke( this, new ComfirmEventArgs( "チーム選択に戻りますか？", BackToTeamSelect ) );
 					}
 					else {
@@ -661,7 +661,14 @@ namespace FRCTimer3 {
 			cmdAppClose ??
 			( cmdAppClose = new ActionCommand(
 				this,
-				p => ExitFRCTimer?.Invoke( this, new ComfirmEventArgs( "", Close ) )
+				p => ExitFRCTimer?.Invoke( this, new ComfirmEventArgs(
+					NowState == FRCTimerState.FRCTimerSetting ?
+					"\n（編集中のチーム名リストは保存されません）" :
+					"",
+					Close,
+                    NowState == FRCTimerState.FRCTimerSetting
+                    )
+				)
 			) );
 
 		/// <summary>

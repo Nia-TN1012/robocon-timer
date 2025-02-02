@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:FRCTimer3"
         mc:Ignorable="d" x:Name="MainWindow1"
 		Title="{Binding AppVer.ProductName}"
-		Icon="/CRTimer;component/crtlogoi.ico"
+		Icon="/RoboconTimer;component/rtlogoi.ico"
 		WindowStyle="None" WindowState="Maximized">
 
     <!-- Window用リソースです。 -->
@@ -158,7 +158,7 @@
 							 PlaySoundEffect="mainViewModel_PlaySoundEffect"/>
     </Window.DataContext>
 
-    <!-- Chronoir Robocon Timerの画面です。 -->
+    <!-- Robocon Timerの画面です。 -->
     <Grid Background="Black">
         <!-- Grid.RowDefinitions、RowDefinitionでGridを行で分割します。 -->
         <Grid.RowDefinitions>
@@ -258,7 +258,7 @@
 
         </Grid>
 
-        <!-- Chronoir Robocon Timerの設定画面です。 -->
+        <!-- Robocon Timerの設定画面です。 -->
         <Border Grid.Row="0" Style="{StaticResource ViewBorder}"
 				Visibility="{Binding FRCTimerIsSetting, Converter={StaticResource BoolToControlVisibility}}">
             <Grid x:Name="Setting" Background="Black">
@@ -437,7 +437,7 @@
                         <!-- タイトルロゴです。 -->
                         <StackPanel Grid.Row="1"
 									Margin="5, 10">
-                            <Image Source="/CRTimer;component/Resources/crtlogos.png"
+                            <Image Source="/RoboconTimer;component/Resources/rtlogos.png"
 								   Stretch="Fill"/>
                             <TextBlock Margin="5"
 									   TextWrapping="WrapWithOverflow"
@@ -452,7 +452,7 @@
                         <!-- クレジットです。 -->
                         <StackPanel Grid.Row="2"
 									Margin="5, 10">
-                            <Image Source="/CRTimer;component/Resources/Chronoir-netLogos.png"
+                            <Image Source="/RoboconTimer;component/Resources/NiaTechLabLogos.png"
 								   Margin="30"
 								   Stretch="Fill"/>
                             <TextBlock Margin="5"

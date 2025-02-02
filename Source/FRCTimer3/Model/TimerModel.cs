@@ -15,7 +15,7 @@ namespace FRCTimer3 {
 	///		JSONのパース用のクラスを定義します。
 	/// </summary>
 	[DataContract]
-	class CRTJson {
+	class SettingJsonData {
 		/// <summary>
 		///		Victory画面に表示するメッセージを取得・設定します。
 		/// </summary>
@@ -38,12 +38,18 @@ namespace FRCTimer3 {
 		///		試合時間を取得・設定します。
 		/// </summary>
 		[DataMember]
-		public double PlayTime { get; set; }
+		public double GameTime { get; set; }
 
-		/// <summary>
-		///		自動機発進のタイムリミットを取得・設定します。
-		/// </summary>
-		[DataMember]
+        /// <summary>
+        ///		（旧バージョンとの互換性を確保）試合時間を取得・設定します。
+        /// </summary>
+        [DataMember]
+        public double PlayTime { get; set; }
+
+        /// <summary>
+        ///		自動機発進のタイムリミットを取得・設定します。
+        /// </summary>
+        [DataMember]
 		public double AutoMachineLanchTimeLimit { get; set; }
 	}
 
@@ -103,7 +109,7 @@ namespace FRCTimer3 {
 		/// <summary>
 		///		試合時間を取得します。
 		/// </summary>
-		public static TimeSpan PlayTime { get; private set; }
+		public static TimeSpan GameTime { get; private set; }
 
 		/// <summary>
 		///		試合において、自動機発進時間のリミットを取得します。
@@ -118,14 +124,14 @@ namespace FRCTimer3 {
 				TimeSpan ts = TimeSpan.Zero;
 				switch( timerType ) {
 					case TimerType.SettingReady:
-					case TimerType.PlayReady:
+					case TimerType.GameReady:
 						ts = TimeSpan.FromSeconds( Math.Ceiling( ( ReadyTime - stopWatch.Elapsed ).TotalSeconds ) );
 						break;
 					case TimerType.Setting:
 						ts = SettingTime - stopWatch.Elapsed;
 						break;
-					case TimerType.Play:
-						ts = PlayTime - stopWatch.Elapsed;
+					case TimerType.Game:
+						ts = GameTime - stopWatch.Elapsed;
 						break;
 				}
 				return ts;
@@ -144,8 +150,8 @@ namespace FRCTimer3 {
 			timeEventManager = new Dictionary<TimerType, Dictionary<TimeSpan, EventHandler>>();
 			timeEventManager[TimerType.SettingReady] = new Dictionary<TimeSpan, EventHandler>();
 			timeEventManager[TimerType.Setting] = new Dictionary<TimeSpan, EventHandler>();
-			timeEventManager[TimerType.PlayReady] = new Dictionary<TimeSpan, EventHandler>();
-			timeEventManager[TimerType.Play] = new Dictionary<TimeSpan, EventHandler>();
+			timeEventManager[TimerType.GameReady] = new Dictionary<TimeSpan, EventHandler>();
+			timeEventManager[TimerType.Game] = new Dictionary<TimeSpan, EventHandler>();
 		}
 
 		/// <summary>
@@ -172,15 +178,15 @@ namespace FRCTimer3 {
 		/// <param name="_finishPlayTime">試合を終了する時に実行するイベント</param>
 		/// <param name="_notifyLast10sec">残り時間が10秒になった時に実行するイベント</param>
 		/// <param name="_finishAutoMachineLanchStartTime">自動機発進時間が終了した時に発生するイベント</param>
-		/// <param name="_playReadySound">Readyサウンドを鳴らすイベント</param>
-		/// <param name="_playStartSound">開始サウンドを鳴らすイベント</param>
-		/// <param name="_playLast3secSound">残り3秒のサウンドを鳴らすイベント</param>
-		/// <param name="_playFinishSound">終了サウンドを鳴らすイベント</param>
+		/// <param name="_gameReadySound">Readyサウンドを鳴らすイベント</param>
+		/// <param name="_gameStartSound">開始サウンドを鳴らすイベント</param>
+		/// <param name="_gameLast3secSound">残り3秒のサウンドを鳴らすイベント</param>
+		/// <param name="_gameFinishSound">終了サウンドを鳴らすイベント</param>
 		public void LoadSettings(
 			EventHandler _modifyDisplayingTimer = null, EventHandler _startSettingTime = null, EventHandler _finishSettingTime = null, 
 			EventHandler _startPlayTime = null, EventHandler _finishPlayTime = null,
 			EventHandler _notifyLast10sec = null, EventHandler _finishAutoMachineLanchStartTime = null,
-			EventHandler _playReadySound = null, EventHandler _playStartSound = null, EventHandler _playLast3secSound = null, EventHandler _playFinishSound = null
+			EventHandler _gameReadySound = null, EventHandler _gameStartSound = null, EventHandler _gameLast3secSound = null, EventHandler _gameFinishSound = null
 		) {
 
 			LoadSettingsResult result = LoadSettingsResult.Succeed;
@@ -193,35 +199,35 @@ namespace FRCTimer3 {
 				// 正規表現でJSONファイル内のコメント「/* ～ */」を取り除きます。
 				Regex jsonCommentTrimmer = new Regex( @"/\*(.*?)\*/", RegexOptions.Singleline );
 
-				DataContractJsonSerializer json = new DataContractJsonSerializer( typeof( CRTJson ) );
+				DataContractJsonSerializer json = new DataContractJsonSerializer( typeof( SettingJsonData ) );
 				MemoryStream ms = new MemoryStream( Encoding.UTF8.GetBytes( jsonCommentTrimmer.Replace( s, "" ) ) );
-				CRTJson crtJson = ( CRTJson )json.ReadObject( ms );
+				SettingJsonData settingJson = ( SettingJsonData )json.ReadObject( ms );
 				ms.Close();
 
 				// JSONをパースします。
-				var rt = crtJson.ReadyTime;
-				var st = crtJson.SettingTime;
-				var pt = crtJson.PlayTime;
+				var readyTime = settingJson.ReadyTime;
+				var settingTime = settingJson.SettingTime;
+				var gameTime = settingJson.GameTime != 0 ? settingJson.GameTime : settingJson.PlayTime;
 
-				if( crtJson.VictoryMessage == null )
+				if( settingJson.VictoryMessage == null )
 					throw new SerializationException();
 
 				// 読み取った値が範囲内であるかどうかチェックします。
-				if( rt < 3.0 || rt > 30 ) {
-					rt = 5.0; result = LoadSettingsResult.ValueOutOfRange;
+				if( readyTime < 3.0 || readyTime > 30 ) {
+					readyTime = 5.0; result = LoadSettingsResult.ValueOutOfRange;
 				}
-				if( st < 0.25 || st > 60.0 ) {
-					st = 1.0; result = LoadSettingsResult.ValueOutOfRange;
+				if( settingTime < 0.25 || settingTime > 60.0 ) {
+					settingTime = 1.0; result = LoadSettingsResult.ValueOutOfRange;
 				}
-				if( pt < 0.25 || pt > 60.0 ) {
-					st = 3.0; result = LoadSettingsResult.ValueOutOfRange;
+				if( gameTime < 0.25 || gameTime > 60.0 ) {
+					settingTime = 3.0; result = LoadSettingsResult.ValueOutOfRange;
 				}
 
-				VictoryMessage = crtJson.VictoryMessage;
-				ReadyTime = TimeSpan.FromSeconds( rt );
-				SettingTime = TimeSpan.FromMinutes( st );
-				PlayTime = TimeSpan.FromMinutes( pt );
-				AutoMachineLanchTimeLimit = TimeSpan.FromSeconds( crtJson.AutoMachineLanchTimeLimit );
+				VictoryMessage = settingJson.VictoryMessage;
+				ReadyTime = TimeSpan.FromSeconds( readyTime );
+				SettingTime = TimeSpan.FromMinutes( settingTime );
+				GameTime = TimeSpan.FromMinutes( gameTime );
+				AutoMachineLanchTimeLimit = TimeSpan.FromSeconds( settingJson.AutoMachineLanchTimeLimit );
 			}
 			// JSONファイルが見つからなかった時
 			catch( FileNotFoundException ) {
@@ -237,10 +243,10 @@ namespace FRCTimer3 {
 			}
 
 			if( result != LoadSettingsResult.Succeed && result != LoadSettingsResult.ValueOutOfRange ) {
-				VictoryMessage = @"V-GOAL Congratulations !";
+				VictoryMessage = @"Congratulations !";
 				ReadyTime = TimeSpan.FromSeconds( 5.0 );
 				SettingTime = TimeSpan.FromMinutes( 1.0 );
-				PlayTime = TimeSpan.FromMinutes( 3.0 );
+				GameTime = TimeSpan.FromMinutes( 3.0 );
 				AutoMachineLanchTimeLimit = TimeSpan.FromSeconds( 15 );
 				try {
 					File.WriteAllBytes( FileName, Properties.Resources.DefaultTimeDef );
@@ -250,24 +256,24 @@ namespace FRCTimer3 {
 				}
 			}
 
-			timeEventManager[TimerType.SettingReady][ReadyTime - TimeSpan.FromSeconds( 3 )] = _playReadySound;
+			timeEventManager[TimerType.SettingReady][ReadyTime - TimeSpan.FromSeconds( 3 )] = _gameReadySound;
 			timeEventManager[TimerType.SettingReady][ReadyTime] = _startSettingTime;
-			timeEventManager[TimerType.SettingReady][ReadyTime] += _playStartSound;
+			timeEventManager[TimerType.SettingReady][ReadyTime] += _gameStartSound;
 			
 			timeEventManager[TimerType.Setting][SettingTime - TimeSpan.FromSeconds( 10 )] = _notifyLast10sec;
-			timeEventManager[TimerType.Setting][SettingTime - TimeSpan.FromSeconds( 3 )] = _playLast3secSound;
+			timeEventManager[TimerType.Setting][SettingTime - TimeSpan.FromSeconds( 3 )] = _gameLast3secSound;
 			timeEventManager[TimerType.Setting][SettingTime] = _finishSettingTime;
-			timeEventManager[TimerType.Setting][SettingTime] += _playFinishSound;
+			timeEventManager[TimerType.Setting][SettingTime] += _gameFinishSound;
 			
-			timeEventManager[TimerType.PlayReady][ReadyTime - TimeSpan.FromSeconds( 3 )] = _playReadySound;
-			timeEventManager[TimerType.PlayReady][ReadyTime] = _startPlayTime;
-			timeEventManager[TimerType.PlayReady][ReadyTime] += _playStartSound;
+			timeEventManager[TimerType.GameReady][ReadyTime - TimeSpan.FromSeconds( 3 )] = _gameReadySound;
+			timeEventManager[TimerType.GameReady][ReadyTime] = _startPlayTime;
+			timeEventManager[TimerType.GameReady][ReadyTime] += _gameStartSound;
 
-			timeEventManager[TimerType.Play][AutoMachineLanchTimeLimit] = _finishAutoMachineLanchStartTime;
-			timeEventManager[TimerType.Play][PlayTime - TimeSpan.FromSeconds( 10 )] = _notifyLast10sec;
-			timeEventManager[TimerType.Play][PlayTime - TimeSpan.FromSeconds( 3 )] = _playLast3secSound;
-			timeEventManager[TimerType.Play][PlayTime] = _finishPlayTime;
-			timeEventManager[TimerType.Play][PlayTime] += _playFinishSound;
+			timeEventManager[TimerType.Game][AutoMachineLanchTimeLimit] = _finishAutoMachineLanchStartTime;
+			timeEventManager[TimerType.Game][GameTime - TimeSpan.FromSeconds( 10 )] = _notifyLast10sec;
+			timeEventManager[TimerType.Game][GameTime - TimeSpan.FromSeconds( 3 )] = _gameLast3secSound;
+			timeEventManager[TimerType.Game][GameTime] = _finishPlayTime;
+			timeEventManager[TimerType.Game][GameTime] += _gameFinishSound;
 
 			ModifyDisplayingTimer = _modifyDisplayingTimer;
 
@@ -277,10 +283,10 @@ namespace FRCTimer3 {
 		/// <summary>
 		///		タイマーを開始します。
 		/// </summary>
-		public void Start( TimerType ttype ) {
-			timerType = ttype;
+		public void Start( TimerType timerType ) {
+			this.timerType = timerType;
 
-			timeEventQueue = new Queue<TimeSpan>( timeEventManager[timerType].Select( _ => _.Key ) );
+            timeEventQueue = new Queue<TimeSpan>(timeEventManager[this.timerType].Select( _ => _.Key ) );
 
 			// タイマーが動作していた場合、リセットします。
 			if( stopWatch.IsRunning ) {

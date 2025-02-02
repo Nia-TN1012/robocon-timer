@@ -69,15 +69,15 @@ namespace FRCTimer3 {
 
 			// アプリの状態とCommandButtonの関連付けたリストを作成します。
 			FRCCommandSetList = new Dictionary<FRCTimerState, CommandButton[]> {
-				[FRCTimerState.TeamSelect] = new CommandButton[4] { startSetting, skipSetting, configuration, appEnd },
-				[FRCTimerState.SettingReady] = new CommandButton[2] { canceler, appEnd },
-				[FRCTimerState.SettingTime] = new CommandButton[2] { canceler, appEnd },
-				[FRCTimerState.PlayPrepairing] = new CommandButton[3] { startPlaying, backToTeamSelect, appEnd },
-				[FRCTimerState.PlayReady] = new CommandButton[2] { canceler, appEnd },
-				[FRCTimerState.PlayTime] = new CommandButton[3] { vGoal, canceler, appEnd },
-				[FRCTimerState.GameSet] = new CommandButton[2] { backToTeamSelect, appEnd },
-				[FRCTimerState.Victory] = new CommandButton[2] { backToTeamSelect, appEnd },
-				[FRCTimerState.FRCTimerSetting] = new CommandButton[3] { saveTeamsList, closeSetting, applySetting }
+				[FRCTimerState.TeamSelect] = new CommandButton[] { startSetting, skipSetting, configuration, appEnd },
+				[FRCTimerState.SettingReady] = new CommandButton[] { canceler, appEnd },
+				[FRCTimerState.SettingTime] = new CommandButton[] { canceler, appEnd },
+				[FRCTimerState.GamePrepairing] = new CommandButton[] { startPlaying, backToTeamSelect, appEnd },
+				[FRCTimerState.GameReady] = new CommandButton[] { canceler, appEnd },
+				[FRCTimerState.GameTime] = new CommandButton[] { vGoal, canceler, appEnd },
+				[FRCTimerState.GameSet] = new CommandButton[] { backToTeamSelect, appEnd },
+				[FRCTimerState.Victory] = new CommandButton[] { backToTeamSelect, appEnd },
+				[FRCTimerState.FRCTimerSetting] = new CommandButton[] { saveTeamsList, closeSetting, applySetting, appEnd }
 			};
 		}
 	}
