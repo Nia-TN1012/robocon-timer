@@ -2,7 +2,7 @@
 このフォルダー内に、Robocon Timer by Nia T.N. Tech Lab.のソースコードが置いています。
 
 ## 著作権
-本ソフトウェア（後述の一部の素材を除く）の著作権は 智中ニア（ Nia Tomonaka ） が所持しています。
+本ソフトウェア（後述の一部の素材を除く）の著作権は ニアの技術研究所（Nia T.N. Tech Lab.） が所持しています。
 　Copyright (C) 2014-2025 Nia T.N. Tech Lab.
 
 ## 免責事項
