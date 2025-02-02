@@ -19,7 +19,7 @@ Robocon Timer by Nia T.N. Tech Lab.（以下、Robocon Timer）（旧Chronoir Ro
 |転載|可|
 |ホームページ|https://tech.nia-tn1012.com/|
 |GitHub|https://github.com/Nia-TN1012/robocon-timer
-|Twitter|[@nia_tn1012](https://twitter.com/nia_tn1012)|
+|X（旧Twitter）|[@nia_tn1012](https://x.com/nia_tn1012)|
 
 ## ファイル構成
 ファイルの構成は以下の通りになっています。
@@ -51,7 +51,7 @@ CRTimerフォルダ
 * 本ソフトウェアは全画面で表示します。ディスプレイの解像度は1280×768以上を推奨します。
 
 ## ダウンロード＆インストール
-「[Chronoir Robocon Timer.zip](https://chronoir.net/wp-content/uploads/Apps/Chronoir%20Robocon%20Timer.zip)」をダウンロードし、任意の場所に解凍します。
+「[Robocon Timer.zip](https://tech.nia-tn1012.com/wp-content/uploads/Apps/Robocon%20Timer.zip)」をダウンロードし、任意の場所に解凍します。
 インストールは不要です。
 
 ## アンインストール
